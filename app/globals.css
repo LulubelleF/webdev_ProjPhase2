@@ -1,0 +1,288 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Custom Humane theme colors */
+    --humane-bg-light: 238 65% 90%; /* Lighter than #a3a6d8 */
+    --humane-border: 239 45% 55%; /* Slightly darker than #7174c4 */
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Add explicit button styling to ensure visibility */
+.btn,
+button[type="button"],
+button[type="submit"],
+.button {
+  @apply text-foreground bg-background border border-input hover:bg-accent hover:text-accent-foreground;
+}
+
+/* Ensure primary buttons are visible */
+.btn-primary,
+button[variant="default"],
+.button-primary {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90;
+}
+
+/* Add explicit styling for the gradient-rainbow class */
+.bg-gradient-rainbow {
+  background: linear-gradient(90deg, #e74c3c, #f39c12, #f1c40f, #2ecc71, #3498db, #9b59b6);
+  color: white !important; /* Force white text for visibility */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Add text shadow for better readability */
+}
+
+/* Ensure buttons with gradient-rainbow are visible */
+button.bg-gradient-rainbow,
+.button.bg-gradient-rainbow,
+[type="button"].bg-gradient-rainbow,
+[type="submit"].bg-gradient-rainbow {
+  background: linear-gradient(90deg, #e74c3c, #f39c12, #f1c40f, #2ecc71, #3498db, #9b59b6);
+  color: white !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: none;
+}
+
+/* Ensure form elements have visible borders */
+.card,
+.input,
+.select,
+.textarea,
+.button {
+  @apply border border-gray-200;
+}
+
+/* Ensure select triggers have visible borders */
+.select-trigger {
+  @apply border border-gray-300;
+}
+
+/* Updated styles for borders and backgrounds */
+
+/* Make all borders thinner and use the custom color */
+.border,
+[class*="border-"] {
+  border-width: 1px !important;
+  border-color: hsl(var(--humane-border)) !important;
+}
+
+/* Update the table styling to match the image */
+
+/* Remove all table borders */
+table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border: 1px solid hsl(var(--humane-border)) !important;
+  background-color: white !important;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+th,
+td {
+  border: none !important;
+  background-color: white !important;
+}
+
+/* Remove all header borders */
+th {
+  border-right: none !important;
+}
+
+/* Remove bottom border from the last row */
+tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* Ensure table headers are visible */
+thead {
+  background-color: #f8f9fa !important;
+}
+
+/* Remove border from the bottom of the header row */
+thead tr {
+  border-bottom: none !important;
+}
+
+/* Special styling for employee and user account tables */
+.app-dashboard-accounts-page table,
+.app-dashboard-page table,
+.app-dashboard-employees-page table {
+  border: 1px solid hsl(var(--humane-border)) !important;
+  box-shadow: none !important;
+}
+
+.app-dashboard-accounts-page th,
+.app-dashboard-accounts-page td,
+.app-dashboard-page th,
+.app-dashboard-page td,
+.app-dashboard-employees-page th,
+.app-dashboard-employees-page td {
+  border: none !important;
+}
+
+.app-dashboard-accounts-page thead,
+.app-dashboard-page thead,
+.app-dashboard-employees-page thead {
+  border-bottom: none !important;
+}
+
+.app-dashboard-accounts-page .rounded-md.border,
+.app-dashboard-page .rounded-md.border,
+.app-dashboard-employees-page .rounded-md.border {
+  border: 1px solid hsl(var(--humane-border)) !important;
+  overflow: hidden;
+}
+
+/* Make card borders more visible but thin */
+.card,
+.bg-card {
+  border: 1px solid hsl(var(--humane-border)) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Make input borders more visible */
+input,
+select,
+.select-trigger,
+textarea {
+  border: 1px solid hsl(var(--humane-border)) !important;
+}
+
+/* Enhance button borders */
+button,
+.button {
+  border: 1px solid hsl(var(--humane-border)) !important;
+}
+
+/* Apply the lighter background to all pages */
+.bg-slate-50,
+.bg-gradient-to-br.from-humane-blue\/5.to-humane-purple\/5,
+div.flex-1.p-8 {
+  background-color: hsl(var(--humane-bg-light)) !important;
+  background-image: none !important;
+}
+
+/* Ensure cards and content areas have white background */
+.bg-white,
+.card,
+.bg-card {
+  background-color: white !important;
+}
+
+/* Special styling for employee and user account tables */
+.app-dashboard-accounts-page table,
+.app-dashboard-page table,
+.app-dashboard-employees-page table {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.app-dashboard-accounts-page th,
+.app-dashboard-accounts-page td,
+.app-dashboard-page th,
+.app-dashboard-page td,
+.app-dashboard-employees-page th,
+.app-dashboard-employees-page td {
+  border: none !important;
+}
+
+.app-dashboard-accounts-page thead,
+.app-dashboard-page thead,
+.app-dashboard-employees-page thead {
+  border-bottom: none !important;
+}
+
+.app-dashboard-accounts-page .rounded-md.border,
+.app-dashboard-page .rounded-md.border,
+.app-dashboard-employees-page .rounded-md.border {
+  border: 1px solid hsl(var(--humane-border)) !important;
+  overflow: hidden;
+}
