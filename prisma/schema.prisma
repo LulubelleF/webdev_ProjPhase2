@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String    @unique
+  username     String    @unique
+  password     String
+  email        String
+  fullName     String
+  roleLevel    RoleLevel
+  dateCreated  DateTime  @default(now())
+  lastLogin    DateTime  @updatedAt
+  activeStatus Boolean   @default(true)
+  createdBy    String?
+}
+
+model Employee {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  employeeId  String   @unique
+  firstName   String
+  lastName    String
+  email       String
+  phoneNumber String
+  dateOfBirth DateTime
+
+  // Address
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String
+
+  // Emergency contact
+  emergencyName         String
+  emergencyRelationship String
+  emergencyPhoneNumber  String
+
+  // Employment Info
+  department         String
+  jobTitle           String
+  employmentType     String
+  hireDate           DateTime
+  currentSalary      Float
+  reportingManagerId String?
+  workLocation       String
+  workEmail          String
+  workPhone          String
+  employmentStatus   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String
+  updatedBy String
+}
+
+model AuditLog {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  logId            String
+  employeeId       String
+  dateOfUpdate     DateTime @default(now())
+  timestamp        DateTime
+  attributesEdited String[]
+  oldValues        Json
+  newValues        Json
+  editorUsername   String
+  editorUserId     String
+  actionType       String // "CREATE", "UPDATE", "DELETE"
+}
+
+enum RoleLevel {
+  ADMIN
+  HR
+  USER
+}

@@ -1,9 +1,9 @@
-import CredentialsProvider from "next-auth/providers/credentials";
-import { compare } from "bcrypt";
-import prisma from "@/lib/prisma";
-import type { NextAuthOptions } from "next-auth";
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
+import CredentialsProvider from "next-auth/providers/credentials"
+import { compare } from "bcrypt"
+import prisma from "@/lib/prisma"
+import type { NextAuthOptions } from "next-auth"
+import { redirect } from "next/navigation"
+import { getServerSession } from "next-auth/next"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.username || !credentials?.password) {
-          return null;
+          return null
         }
 
         // Find user by username
@@ -23,21 +23,18 @@ export const authOptions: NextAuthOptions = {
           where: {
             username: credentials.username,
           },
-        });
+        })
 
         // If user doesn't exist or is inactive
         if (!user || !user.activeStatus) {
-          return null;
+          return null
         }
 
         // Check password
-        const isPasswordValid = await compare(
-          credentials.password,
-          user.password
-        );
+        const isPasswordValid = await compare(credentials.password, user.password)
 
         if (!isPasswordValid) {
-          return null;
+          return null
         }
 
         // Update last login time
@@ -48,7 +45,7 @@ export const authOptions: NextAuthOptions = {
           data: {
             lastLogin: new Date(),
           },
-        });
+        })
 
         // Return user object (without password)
         return {
@@ -58,28 +55,28 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           username: user.username,
           role: user.roleLevel,
-        };
+        }
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.userId = user.userId;
-        token.username = user.username;
-        token.role = user.role;
+        token.id = user.id
+        token.userId = user.userId
+        token.username = user.username
+        token.role = user.role
       }
-      return token;
+      return token
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id;
-        session.user.userId = token.userId;
-        session.user.username = token.username;
-        session.user.role = token.role;
+        session.user.id = token.id
+        session.user.userId = token.userId
+        session.user.username = token.username
+        session.user.role = token.role
       }
-      return session;
+      return session
     },
   },
   pages: {
@@ -94,42 +91,43 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signOut({ token }) {
       // You can add any additional cleanup here if needed
-      console.log("User signed out:", token);
+      console.log("User signed out:", token)
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-};
+}
 
 export async function getSession() {
-  return await getServerSession(authOptions);
+  return await getServerSession(authOptions)
 }
 
 export async function getCurrentUser() {
-  const session = await getSession();
+  const session = await getSession()
 
   if (!session?.user) {
-    return null;
+    return null
   }
 
-  return session.user;
+  return session.user
 }
 
 export async function requireAuth() {
-  const user = await getCurrentUser();
+  const user = await getCurrentUser()
 
   if (!user) {
-    redirect("/");
+    redirect("/")
   }
 
-  return user;
+  return user
 }
 
 export async function requireRole(allowedRoles: string[]) {
-  const user = await requireAuth();
+  const user = await requireAuth()
 
   if (!allowedRoles.includes(user.role)) {
-    redirect("/dashboard");
+    redirect("/dashboard")
   }
 
-  return user;
+  return user
 }
+

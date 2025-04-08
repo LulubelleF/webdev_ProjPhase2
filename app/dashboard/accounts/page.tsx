@@ -1,45 +1,20 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Search, Edit, Loader2, AlertCircle, Plus } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
-import TopNavigation from "@/components/top-navigation";
-import Footer from "@/components/footer";
-import { format } from "date-fns";
-import { useToast } from "@/components/ui/use-toast";
-import { fetchUsers, updateUser, type User } from "@/lib/api/user-api";
+import { useState, useEffect } from "react"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Search, Edit, Loader2, AlertCircle, Plus } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
+import TopNavigation from "@/components/top-navigation"
+import Footer from "@/components/footer"
+import { format } from "date-fns"
+import { useToast } from "@/components/ui/use-toast"
+import { fetchUsers, updateUser, type User } from "@/lib/api/user-api"
 import {
   Pagination,
   PaginationContent,
@@ -48,26 +23,26 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+} from "@/components/ui/pagination"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 // Import the ResetPasswordDialog component
-import ResetPasswordDialog from "@/components/reset-password-dialog";
-import { useRouter } from "next/navigation";
+import ResetPasswordDialog from "@/components/reset-password-dialog"
+import { useRouter } from "next/navigation"
 
 export default function AccountsPage() {
-  const { toast } = useToast();
-  const router = useRouter();
+  const { toast } = useToast()
+  const router = useRouter()
 
   // State for users and loading
-  const [users, setUsers] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [users, setUsers] = useState<User[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   // State for filters
-  const [searchTerm, setSearchTerm] = useState("");
-  const [roleFilter, setRoleFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("")
+  const [roleFilter, setRoleFilter] = useState("all")
+  const [statusFilter, setStatusFilter] = useState("all")
 
   // State for pagination
   const [pagination, setPagination] = useState({
@@ -75,13 +50,13 @@ export default function AccountsPage() {
     page: 1,
     limit: 10,
     pages: 1,
-  });
+  })
 
   // State for selected user (for editing)
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   // State for form submission
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // State for edit form
   const [editForm, setEditForm] = useState({
@@ -89,137 +64,134 @@ export default function AccountsPage() {
     email: "",
     roleLevel: "",
     activeStatus: true,
-  });
+  })
 
   // Function to load users
   const loadUsers = async (page = 1) => {
-    setIsLoading(true);
-    setError(null);
+    setIsLoading(true)
+    setError(null)
 
     try {
       const params: any = {
         page,
         limit: pagination.limit,
-      };
+      }
 
       // Add search term if provided
       if (searchTerm) {
-        params.search = searchTerm;
+        params.search = searchTerm
       }
 
       // Add role filter if selected
       if (roleFilter !== "all") {
-        params.role = roleFilter;
+        params.role = roleFilter
       }
 
       // Add status filter if selected
       if (statusFilter !== "all") {
-        params.status = statusFilter;
+        params.status = statusFilter
       }
 
-      const response = await fetchUsers(params);
+      const response = await fetchUsers(params)
 
-      setUsers(response.data);
-      setPagination(response.pagination);
+      setUsers(response.data)
+      setPagination(response.pagination)
     } catch (err: any) {
-      setError(err.message || "Failed to load users");
+      setError(err.message || "Failed to load users")
       toast({
         title: "Error",
         description: err.message || "Failed to load users",
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   // Load users on initial render and when filters change
   useEffect(() => {
-    loadUsers(1); // Reset to first page when filters change
-  }, [searchTerm, roleFilter, statusFilter]);
+    loadUsers(1) // Reset to first page when filters change
+  }, [searchTerm, roleFilter, statusFilter])
 
   // Handle filter reset
   const resetFilters = () => {
-    setSearchTerm("");
-    setRoleFilter("all");
-    setStatusFilter("all");
-  };
+    setSearchTerm("")
+    setRoleFilter("all")
+    setStatusFilter("all")
+  }
 
   // Handle page change
   const handlePageChange = (page: number) => {
-    loadUsers(page);
-  };
+    loadUsers(page)
+  }
 
   // Handle edit user
   const handleEditUser = (user: User) => {
-    setSelectedUser(user);
+    setSelectedUser(user)
     setEditForm({
       fullName: user.fullName,
       email: user.email,
       roleLevel: user.roleLevel,
       activeStatus: user.activeStatus,
-    });
-  };
+    })
+  }
 
   // Handle edit form input change
   const handleEditFormChange = (field: string, value: any) => {
     setEditForm({
       ...editForm,
       [field]: value,
-    });
-  };
+    })
+  }
 
   // Handle edit form submission
   const handleUpdateUser = async () => {
-    if (!selectedUser) return;
+    if (!selectedUser) return
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
 
     try {
-      await updateUser(selectedUser.id, editForm);
+      await updateUser(selectedUser.id, editForm)
 
       toast({
         title: "Success",
         description: "User account updated successfully",
-      });
+      })
 
       // Reload users
-      loadUsers(pagination.page);
+      loadUsers(pagination.page)
 
       // Close dialog
-      setSelectedUser(null);
+      setSelectedUser(null)
     } catch (err: any) {
       toast({
         title: "Error",
         description: err.message || "Failed to update user",
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   // Format date for display
   const formatDate = (date: Date | string | null) => {
-    if (!date) return "Never";
-    return format(new Date(date), "yyyy-MM-dd HH:mm a");
-  };
+    if (!date) return "Never"
+    return format(new Date(date), "yyyy-MM-dd HH:mm a")
+  }
 
   // Generate pagination items
   const renderPaginationItems = () => {
-    const items = [];
-    const maxVisiblePages = 5;
+    const items = []
+    const maxVisiblePages = 5
 
     // Calculate range of pages to show
-    let startPage = Math.max(
-      1,
-      pagination.page - Math.floor(maxVisiblePages / 2)
-    );
-    const endPage = Math.min(pagination.pages, startPage + maxVisiblePages - 1);
+    let startPage = Math.max(1, pagination.page - Math.floor(maxVisiblePages / 2))
+    const endPage = Math.min(pagination.pages, startPage + maxVisiblePages - 1)
 
     // Adjust if we're near the end
     if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      startPage = Math.max(1, endPage - maxVisiblePages + 1)
     }
 
     // Add first page and ellipsis if needed
@@ -227,15 +199,15 @@ export default function AccountsPage() {
       items.push(
         <PaginationItem key="first">
           <PaginationLink onClick={() => handlePageChange(1)}>1</PaginationLink>
-        </PaginationItem>
-      );
+        </PaginationItem>,
+      )
 
       if (startPage > 2) {
         items.push(
           <PaginationItem key="ellipsis-start">
             <PaginationEllipsis />
-          </PaginationItem>
-        );
+          </PaginationItem>,
+        )
       }
     }
 
@@ -243,14 +215,11 @@ export default function AccountsPage() {
     for (let i = startPage; i <= endPage; i++) {
       items.push(
         <PaginationItem key={i}>
-          <PaginationLink
-            isActive={pagination.page === i}
-            onClick={() => handlePageChange(i)}
-          >
+          <PaginationLink isActive={pagination.page === i} onClick={() => handlePageChange(i)}>
             {i}
           </PaginationLink>
-        </PaginationItem>
-      );
+        </PaginationItem>,
+      )
     }
 
     // Add last page and ellipsis if needed
@@ -259,21 +228,19 @@ export default function AccountsPage() {
         items.push(
           <PaginationItem key="ellipsis-end">
             <PaginationEllipsis />
-          </PaginationItem>
-        );
+          </PaginationItem>,
+        )
       }
 
       items.push(
         <PaginationItem key="last">
-          <PaginationLink onClick={() => handlePageChange(pagination.pages)}>
-            {pagination.pages}
-          </PaginationLink>
-        </PaginationItem>
-      );
+          <PaginationLink onClick={() => handlePageChange(pagination.pages)}>{pagination.pages}</PaginationLink>
+        </PaginationItem>,
+      )
     }
 
-    return items;
-  };
+    return items
+  }
 
   return (
     <div className="flex min-h-screen flex-col app-dashboard-accounts-page">
@@ -283,12 +250,8 @@ export default function AccountsPage() {
       <div className="flex-1 p-8">
         <div className="mb-8 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-slate-800">
-              System Account Management
-            </h1>
-            <p className="text-slate-600">
-              Create and manage system user accounts
-            </p>
+            <h1 className="text-3xl font-bold text-slate-800">System Account Management</h1>
+            <p className="text-slate-600">Create and manage system user accounts</p>
           </div>
 
           <Button
@@ -336,12 +299,7 @@ export default function AccountsPage() {
                   </SelectContent>
                 </Select>
 
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={resetFilters}
-                  className="border border-gray-300"
-                >
+                <Button variant="outline" size="icon" onClick={resetFilters} className="border border-gray-300">
                   <Search className="h-4 w-4" />
                 </Button>
               </div>
@@ -362,14 +320,10 @@ export default function AccountsPage() {
                     <TableHead>User ID</TableHead>
                     <TableHead>Username</TableHead>
                     <TableHead>Full Name</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Email
-                    </TableHead>
+                    <TableHead className="hidden md:table-cell">Email</TableHead>
                     <TableHead>Role</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Last Login
-                    </TableHead>
+                    <TableHead className="hidden md:table-cell">Last Login</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -386,40 +340,28 @@ export default function AccountsPage() {
                   ) : users.length > 0 ? (
                     users.map((user) => (
                       <TableRow key={user.id}>
-                        <TableCell className="font-medium">
-                          {user.userId}
-                        </TableCell>
+                        <TableCell className="font-medium">{user.userId}</TableCell>
                         <TableCell>{user.username}</TableCell>
                         <TableCell>{user.fullName}</TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {user.email}
-                        </TableCell>
+                        <TableCell className="hidden md:table-cell">{user.email}</TableCell>
                         <TableCell>{user.roleLevel}</TableCell>
                         <TableCell>
                           <span
                             className={`px-2 py-1 rounded-full text-xs ${
-                              user.activeStatus
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
+                              user.activeStatus ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                             }`}
                           >
                             {user.activeStatus ? "Active" : "Inactive"}
                           </span>
                         </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {formatDate(user.lastLogin)}
-                        </TableCell>
+                        <TableCell className="hidden md:table-cell">{formatDate(user.lastLogin)}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
                             <Button
                               variant="outline"
                               size="icon"
                               className="border border-gray-300"
-                              onClick={() =>
-                                router.push(
-                                  `/dashboard/accounts/edit/${user.id}`
-                                )
-                              }
+                              onClick={() => router.push(`/dashboard/accounts/edit/${user.id}`)}
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
@@ -429,10 +371,7 @@ export default function AccountsPage() {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell
-                        colSpan={8}
-                        className="text-center py-8 text-gray-500"
-                      >
+                      <TableCell colSpan={8} className="text-center py-8 text-gray-500">
                         No users found matching your filters
                       </TableCell>
                     </TableRow>
@@ -448,14 +387,8 @@ export default function AccountsPage() {
                   <PaginationContent>
                     <PaginationItem>
                       <PaginationPrevious
-                        onClick={() =>
-                          handlePageChange(Math.max(1, pagination.page - 1))
-                        }
-                        className={
-                          pagination.page <= 1
-                            ? "pointer-events-none opacity-50"
-                            : "cursor-pointer"
-                        }
+                        onClick={() => handlePageChange(Math.max(1, pagination.page - 1))}
+                        className={pagination.page <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                       />
                     </PaginationItem>
 
@@ -463,15 +396,9 @@ export default function AccountsPage() {
 
                     <PaginationItem>
                       <PaginationNext
-                        onClick={() =>
-                          handlePageChange(
-                            Math.min(pagination.pages, pagination.page + 1)
-                          )
-                        }
+                        onClick={() => handlePageChange(Math.min(pagination.pages, pagination.page + 1))}
                         className={
-                          pagination.page >= pagination.pages
-                            ? "pointer-events-none opacity-50"
-                            : "cursor-pointer"
+                          pagination.page >= pagination.pages ? "pointer-events-none opacity-50" : "cursor-pointer"
                         }
                       />
                     </PaginationItem>
@@ -484,8 +411,7 @@ export default function AccountsPage() {
             {!isLoading && users.length > 0 && (
               <div className="mt-2 text-sm text-gray-500 text-center">
                 Showing {(pagination.page - 1) * pagination.limit + 1} to{" "}
-                {Math.min(pagination.page * pagination.limit, pagination.total)}{" "}
-                of {pagination.total} users
+                {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} users
               </div>
             )}
           </CardContent>
@@ -493,16 +419,11 @@ export default function AccountsPage() {
       </div>
 
       {/* Edit User Dialog */}
-      <Dialog
-        open={!!selectedUser}
-        onOpenChange={(open) => !open && setSelectedUser(null)}
-      >
+      <Dialog open={!!selectedUser} onOpenChange={(open) => !open && setSelectedUser(null)}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit User Account</DialogTitle>
-            <DialogDescription>
-              Update user account details for {selectedUser?.username}
-            </DialogDescription>
+            <DialogDescription>Update user account details for {selectedUser?.username}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -534,9 +455,7 @@ export default function AccountsPage() {
               <Input
                 id="edit-fullname"
                 value={editForm.fullName}
-                onChange={(e) =>
-                  handleEditFormChange("fullName", e.target.value)
-                }
+                onChange={(e) => handleEditFormChange("fullName", e.target.value)}
                 className="col-span-3 border border-gray-300"
               />
             </div>
@@ -556,12 +475,7 @@ export default function AccountsPage() {
               <Label htmlFor="edit-role" className="text-right">
                 Role
               </Label>
-              <Select
-                value={editForm.roleLevel}
-                onValueChange={(value) =>
-                  handleEditFormChange("roleLevel", value)
-                }
-              >
+              <Select value={editForm.roleLevel} onValueChange={(value) => handleEditFormChange("roleLevel", value)}>
                 <SelectTrigger className="col-span-3 border border-gray-300">
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
@@ -580,23 +494,14 @@ export default function AccountsPage() {
                 <Switch
                   id="edit-status"
                   checked={editForm.activeStatus}
-                  onCheckedChange={(checked) =>
-                    handleEditFormChange("activeStatus", checked)
-                  }
+                  onCheckedChange={(checked) => handleEditFormChange("activeStatus", checked)}
                 />
-                <Label htmlFor="edit-status">
-                  {editForm.activeStatus ? "Active" : "Inactive"}
-                </Label>
+                <Label htmlFor="edit-status">{editForm.activeStatus ? "Active" : "Inactive"}</Label>
               </div>
             </div>
           </div>
           <div className="flex justify-between">
-            {selectedUser && (
-              <ResetPasswordDialog
-                username={selectedUser.username}
-                userId={selectedUser.id}
-              />
-            )}
+            {selectedUser && <ResetPasswordDialog username={selectedUser.username} userId={selectedUser.id} />}
             <div className="space-x-2">
               <Button
                 type="button"
@@ -628,5 +533,6 @@ export default function AccountsPage() {
 
       <Footer />
     </div>
-  );
+  )
 }
+

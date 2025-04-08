@@ -1,12 +1,13 @@
 {
-  "name": "humane-management-system",
+  "name": "Humane-Management-System ",
   "version": " 0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed-employees": "node scripts/seed-employees.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

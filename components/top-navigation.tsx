@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { signOut, useSession } from "next-auth/react";
-import { Button } from "@/components/ui/button";
-import { Home, Settings, LogOut, Menu, X, User } from "lucide-react";
+import { useState } from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { signOut, useSession } from "next-auth/react"
+import { Button } from "@/components/ui/button"
+import { Home, Settings, LogOut, Menu, X, User } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,34 +13,34 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 
 interface TopNavigationProps {
-  activePage: "home" | "accounts";
+  activePage: "home" | "accounts"
 }
 
 export default function TopNavigation({ activePage }: TopNavigationProps) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { data: session } = useSession();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { data: session } = useSession()
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   const handleLogout = async () => {
     try {
-      setIsLoggingOut(true);
+      setIsLoggingOut(true)
 
       // Sign out with explicit redirect to login page
       await signOut({
         callbackUrl: "/",
         redirect: true,
-      });
+      })
 
       // Close mobile menu if open
-      setIsMobileMenuOpen(false);
+      setIsMobileMenuOpen(false)
     } catch (error) {
-      console.error("Logout error:", error);
-      setIsLoggingOut(false);
+      console.error("Logout error:", error)
+      setIsLoggingOut(false)
     }
-  };
+  }
 
   return (
     <header className="bg-white border-b shadow-sm">
@@ -49,13 +49,7 @@ export default function TopNavigation({ activePage }: TopNavigationProps) {
           {/* Logo and Brand */}
           <div className="flex items-center">
             <Link href="/dashboard" className="flex items-center">
-              <Image
-                src="/images/humanelogo.png"
-                alt="Humane Logo"
-                width={40}
-                height={40}
-                className="mr-2"
-              />
+              <Image src="/images/humanelogo.png" alt="Humane Logo" width={40} height={40} className="mr-2" />
               <span className="text-xl font-bold bg-gradient-to-r from-humane-red to-humane-purple bg-clip-text text-transparent">
                 Humane
               </span>
@@ -101,10 +95,7 @@ export default function TopNavigation({ activePage }: TopNavigationProps) {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={handleLogout}
-                  disabled={isLoggingOut}
-                >
+                <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
                 </DropdownMenuItem>
@@ -120,11 +111,7 @@ export default function TopNavigation({ activePage }: TopNavigationProps) {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
             >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </div>
@@ -177,5 +164,6 @@ export default function TopNavigation({ activePage }: TopNavigationProps) {
         )}
       </div>
     </header>
-  );
+  )
 }
+
