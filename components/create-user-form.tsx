@@ -278,14 +278,14 @@ export default function CreateUserForm() {
                   id="status"
                   checked={newUser.activeStatus}
                   onCheckedChange={(checked) => handleNewUserChange("activeStatus", checked)}
-                />
+                />  
                 <Label htmlFor="status">{newUser.activeStatus ? "Active" : "Inactive"}</Label>
               </div>
               <p className="text-sm text-slate-500">Inactive accounts cannot log in to the system.</p>
             </div>
           </div>
 
-          <div className="flex justify-end space-x-2 pt-4 border-t">
+          <div className="flex justify-end space-x-2 pt-4 ">
             <Button
               type="button"
               variant="outline"
