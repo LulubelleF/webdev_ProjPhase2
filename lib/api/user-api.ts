@@ -83,6 +83,7 @@ export async function createUser(data: {
 
   // Prepare user data with hashed password
   const userData = {
+    ...data,
     password: hashedPassword,
   };
 
