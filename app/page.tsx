@@ -162,7 +162,7 @@ export default function LoginPage() {
                 )}
               </RainbowButton>
             </div>
-          </form>
+          </form> 
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-gray-600">

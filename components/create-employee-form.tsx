@@ -118,29 +118,6 @@ export default function CreateEmployeeForm() {
       newErrors.workEmail = "Please enter a valid work email address";
     }
 
-    // Date validations
-    // if (formData.dateOfBirth) {
-    //   const dob = new Date(formData.dateOfBirth)
-    //   if (isNaN(dob.getTime())) {
-    //     newErrors.dateOfBirth = "Invalid date format"
-    //   } else if (dob > new Date()) {
-    //     newErrors.dateOfBirth = "Date of birth cannot be in the future"
-    //   }
-    // }
-
-    // if (formData.hireDate) {
-    //   const hireDate = new Date(formData.hireDate)
-    //   if (isNaN(hireDate.getTime())) {
-    //     newErrors.hireDate = "Invalid date format"
-    //   } else {
-    //     const maxFutureDate = new Date()
-    //     maxFutureDate.setFullYear(maxFutureDate.getFullYear() + 1)
-    //     if (hireDate > maxFutureDate) {
-    //       newErrors.hireDate = "Hire date cannot be more than 1 year in the future"
-    //     }
-    //   }
-    // }
-
     if (formData.dateOfBirth) {
       const dob = new Date(formData.dateOfBirth);
       const today = new Date();
